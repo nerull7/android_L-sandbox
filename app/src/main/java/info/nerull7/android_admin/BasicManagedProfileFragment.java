@@ -75,7 +75,9 @@ public class BasicManagedProfileFragment extends Fragment
     };
 
     private static final String[] PACKAGE_NAMES_CAMERA = {
-            "com.google.android.GoogleCamera"
+            "com.google.android.GoogleCamera",
+            "com.android.camera",
+            "com.android.camera2"
     };
 
     private Button mButtonRemoveProfile;
@@ -160,7 +162,7 @@ public class BasicManagedProfileFragment extends Fragment
         toggleEmail.setOnCheckedChangeListener(this);
         Switch toggleCamera = (Switch) view.findViewById(R.id.toggle_camera);
         toggleCamera.setChecked(mCameraEnabled);
-        toggleCamera.setOnClickListener(this);
+        toggleCamera.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -214,21 +216,10 @@ public class BasicManagedProfileFragment extends Fragment
                 break;
             }
             case R.id.toggle_camera: {
-                setCameraEnable(checked);
+                setAppEnabled(PACKAGE_NAMES_CAMERA, checked);
                 mCameraEnabled = checked;
             }
         }
-    }
-
-    private void setCameraEnable(boolean enable) {
-        Activity activity = getActivity();
-        if (null == activity) {
-            return;
-        }
-        DevicePolicyManager manager =
-                (DevicePolicyManager) activity.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        manager.setCameraDisabled(BasicDeviceAdminReceiver.getComponentName(activity),!enable);
-        setAppEnabled(PACKAGE_NAMES_CAMERA, enable);
     }
 
     /**
