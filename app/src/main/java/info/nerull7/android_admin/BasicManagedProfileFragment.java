@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -102,7 +101,7 @@ public class BasicManagedProfileFragment extends Fragment
         // Gets an instance of DevicePolicyManager
         DevicePolicyManager manager =
             (DevicePolicyManager) activity.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        // Retrieves whether the calculator app is enabled in this profile
+        // Retrieves whether the settings app is enabled in this profile
         mSettingsEnabled = !manager.isApplicationBlocked(
                 BasicDeviceAdminReceiver.getComponentName(activity), PACKAGE_NAMES_SETTINGS[0]);
         // Retrieves whether Chrome is enabled in this profile
@@ -120,11 +119,18 @@ public class BasicManagedProfileFragment extends Fragment
             if (!manager.isApplicationBlocked(
                     BasicDeviceAdminReceiver.getComponentName(activity), packageName)) {
                 mEmailEnabled = true;
-                return;
+                break;
             }
         }
 
-        mCameraEnabled = !manager.getCameraDisabled(BasicDeviceAdminReceiver.getComponentName(activity));
+        mCameraEnabled = false;
+        for (String packageName : PACKAGE_NAMES_CAMERA) {
+            if (!manager.isApplicationBlocked(
+                    BasicDeviceAdminReceiver.getComponentName(activity), packageName)) {
+                mCameraEnabled = true;
+                break;
+            }
+        }
     }
 
     @Override
