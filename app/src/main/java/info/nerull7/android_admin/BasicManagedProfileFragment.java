@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,6 +74,10 @@ public class BasicManagedProfileFragment extends Fragment
             "com.google.android.gm"
     };
 
+    private static final String[] PACKAGE_NAMES_CAMERA = {
+            "com.google.android.GoogleCamera"
+    };
+
     private Button mButtonRemoveProfile;
 
     /** Whether the calculator app is enabled in this profile */
@@ -84,6 +89,7 @@ public class BasicManagedProfileFragment extends Fragment
     /** Whether Settings is enabled in this profile */
     private boolean mSettingsEnabled;
     private boolean mEmailEnabled;
+    private boolean mCameraEnabled;
 
     public BasicManagedProfileFragment() {
     }
@@ -127,6 +133,8 @@ public class BasicManagedProfileFragment extends Fragment
                 return;
             }
         }
+
+        mCameraEnabled = !manager.getCameraDisabled(BasicDeviceAdminReceiver.getComponentName(activity));
     }
 
     @Override
@@ -150,6 +158,9 @@ public class BasicManagedProfileFragment extends Fragment
         Switch toggleEmail = (Switch) view.findViewById(R.id.toggle_email);
         toggleEmail.setChecked(mEmailEnabled);
         toggleEmail.setOnCheckedChangeListener(this);
+        Switch toggleCamera = (Switch) view.findViewById(R.id.toggle_camera);
+        toggleCamera.setChecked(mCameraEnabled);
+        toggleCamera.setOnClickListener(this);
     }
 
     @Override
@@ -202,7 +213,22 @@ public class BasicManagedProfileFragment extends Fragment
                 mEmailEnabled = checked;
                 break;
             }
+            case R.id.toggle_camera: {
+                setCameraEnable(checked);
+                mCameraEnabled = checked;
+            }
         }
+    }
+
+    private void setCameraEnable(boolean enable) {
+        Activity activity = getActivity();
+        if (null == activity) {
+            return;
+        }
+        DevicePolicyManager manager =
+                (DevicePolicyManager) activity.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        manager.setCameraDisabled(BasicDeviceAdminReceiver.getComponentName(activity),!enable);
+        setAppEnabled(PACKAGE_NAMES_CAMERA, enable);
     }
 
     /**
