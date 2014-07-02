@@ -31,5 +31,6 @@
     <string name="icon">Icon</string>
     <string name="toggle_settings">Settings</string>
     <string name="toggle_email">Emails in this profile</string>
+    <string name="toggle_camera">Enable Camera</string>
 
 </resources>

@@ -60,7 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:padding="8dp"
-            android:text="@string/toggle_settings" />
+            android:text="@string/toggle_settings"
+            android:checked="false" />
 
         <Switch
             android:id="@+id/toggle_email"
@@ -69,6 +70,14 @@
             android:layout_marginTop="24dp"
             android:padding="8dp"
             android:text="@string/toggle_email" />
+
+        <Switch
+            android:id="@+id/toggle_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="8dp"
+            android:text="@string/toggle_camera" />
 
         <Button
             android:id="@+id/set_chrome_restrictions"
