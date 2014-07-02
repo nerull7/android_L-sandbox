@@ -49,13 +49,6 @@ public class BasicManagedProfileFragment extends Fragment
     CompoundButton.OnCheckedChangeListener {
 
     /**
-     * Package names of calculator
-     */
-    private static final String[] PACKAGE_NAMES_CALCULATOR = {
-            "com.android.calculator2"
-    };
-
-    /**
      * Package names of Chrome
      */
     private static final String[] PACKAGE_NAMES_CHROME = {
@@ -81,9 +74,6 @@ public class BasicManagedProfileFragment extends Fragment
     };
 
     private Button mButtonRemoveProfile;
-
-    /** Whether the calculator app is enabled in this profile */
-    private boolean mCalculatorEnabled;
 
     /** Whether Chrome is enabled in this profile */
     private boolean mChromeEnabled;
@@ -113,8 +103,6 @@ public class BasicManagedProfileFragment extends Fragment
         DevicePolicyManager manager =
             (DevicePolicyManager) activity.getSystemService(Context.DEVICE_POLICY_SERVICE);
         // Retrieves whether the calculator app is enabled in this profile
-        mCalculatorEnabled = !manager.isApplicationBlocked(
-                BasicDeviceAdminReceiver.getComponentName(activity), PACKAGE_NAMES_CALCULATOR[0]);
         mSettingsEnabled = !manager.isApplicationBlocked(
                 BasicDeviceAdminReceiver.getComponentName(activity), PACKAGE_NAMES_SETTINGS[0]);
         // Retrieves whether Chrome is enabled in this profile
@@ -148,9 +136,6 @@ public class BasicManagedProfileFragment extends Fragment
         view.findViewById(R.id.send_intent).setOnClickListener(this);
         mButtonRemoveProfile = (Button) view.findViewById(R.id.remove_profile);
         mButtonRemoveProfile.setOnClickListener(this);
-        Switch toggleCalculator = (Switch) view.findViewById(R.id.toggle_calculator);
-        toggleCalculator.setChecked(mCalculatorEnabled);
-        toggleCalculator.setOnCheckedChangeListener(this);
         Switch toggleChrome = (Switch) view.findViewById(R.id.toggle_chrome);
         toggleChrome.setChecked(mChromeEnabled);
         toggleChrome.setOnCheckedChangeListener(this);
@@ -195,11 +180,6 @@ public class BasicManagedProfileFragment extends Fragment
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         switch (compoundButton.getId()) {
-            case R.id.toggle_calculator: {
-                setAppEnabled(PACKAGE_NAMES_CALCULATOR, checked);
-                mCalculatorEnabled = checked;
-                break;
-            }
             case R.id.toggle_chrome: {
                 setAppEnabled(PACKAGE_NAMES_CHROME, checked);
                 mChromeEnabled = checked;
